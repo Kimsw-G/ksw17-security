@@ -14,6 +14,16 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 961163244284-sek7s5lhr3ch4ba1ftc1ggk984m28pvp.apps.googleusercontent.com
+            client-secret: cv57bNxy0P0NFWfuzpwPsiiL
+            scope:
+              - email
+              - profile
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mysql://localhost:3308/security
