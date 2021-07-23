@@ -1,5 +1,7 @@
 package com.example.ksw17security.config;
 
+import com.example.ksw17security.config.auth.PrincipalOauth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity // 필터 체인에 등록!!
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     // 리턴되는 오브젝트를 IOC로 사용 가능
     @Bean
@@ -30,6 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login") // 시큐리티가 대신 진행
-                .defaultSuccessUrl("/");
+                .defaultSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .loginPage("/loginForm") // 로그인 끝
+                .userInfoEndpoint() // 이곳에서 후처리가 진행된다!
+                .userService(principalOauth2UserService);
     }
 }

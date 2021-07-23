@@ -1,5 +1,6 @@
 package com.example.ksw17security.controller;
 
+import com.example.ksw17security.config.auth.PrincipalDetails;
 import com.example.ksw17security.model.User;
 import com.example.ksw17security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,11 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,5 +84,20 @@ public class IndexController {
     public String data(){
         // TODO : PostAuthorize , PreAuthorize 비교 분석
         return "데이터";
+    }
+
+    @ResponseBody
+    @GetMapping("/test/login")
+    public String testLogin(Authentication authentication,
+                            @AuthenticationPrincipal UserDetails userDetails,
+                            @AuthenticationPrincipal OAuth2User oAuth2User){
+        System.out.println("testlogin===================================");
+
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println("authentication : " + principalDetails.getUsername());
+        System.out.println("userDetails : " + userDetails.getUsername());
+        System.out.println("OAuth2User : " + oAuth2User.getAttributes());
+
+        return "test/login";
     }
 }
